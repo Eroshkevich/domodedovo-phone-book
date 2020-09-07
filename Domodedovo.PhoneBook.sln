@@ -1,8 +1,40 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domodedovo.PhoneBook.UserLoader", "src\Domodedovo.PhoneBook.UserLoader\Domodedovo.PhoneBook.UserLoader.csproj", "{C90DB446-54F1-4FAB-BA3A-F5F867293BAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domodedovo.PhoneBook.Integrations.RandomUser", "src\Domodedovo.PhoneBook.Integrations.RandomUser\Domodedovo.PhoneBook.Integrations.RandomUser.csproj", "{AD61F0DB-D355-4F24-8B17-2EA48EB741D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domodedovo.PhoneBook.Data", "src\Domodedovo.PhoneBook.Data\Domodedovo.PhoneBook.Data.csproj", "{6B2625B1-1B31-4862-94B8-F22551BEE115}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domodedovo.PhoneBook.Core", "src\Domodedovo.PhoneBook.Core\Domodedovo.PhoneBook.Core.csproj", "{864EA159-491E-4497-AB62-6AA29D4C7063}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domodedovo.PhoneBook.WebAPI", "src\Domodedovo.PhoneBook.WebAPI\Domodedovo.PhoneBook.WebAPI.csproj", "{AD3E8AAA-F8AB-4B06-83B4-6461907B1082}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C90DB446-54F1-4FAB-BA3A-F5F867293BAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C90DB446-54F1-4FAB-BA3A-F5F867293BAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C90DB446-54F1-4FAB-BA3A-F5F867293BAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C90DB446-54F1-4FAB-BA3A-F5F867293BAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD61F0DB-D355-4F24-8B17-2EA48EB741D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD61F0DB-D355-4F24-8B17-2EA48EB741D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD61F0DB-D355-4F24-8B17-2EA48EB741D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD61F0DB-D355-4F24-8B17-2EA48EB741D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B2625B1-1B31-4862-94B8-F22551BEE115}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B2625B1-1B31-4862-94B8-F22551BEE115}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B2625B1-1B31-4862-94B8-F22551BEE115}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B2625B1-1B31-4862-94B8-F22551BEE115}.Release|Any CPU.Build.0 = Release|Any CPU
+		{864EA159-491E-4497-AB62-6AA29D4C7063}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{864EA159-491E-4497-AB62-6AA29D4C7063}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{864EA159-491E-4497-AB62-6AA29D4C7063}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{864EA159-491E-4497-AB62-6AA29D4C7063}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD3E8AAA-F8AB-4B06-83B4-6461907B1082}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD3E8AAA-F8AB-4B06-83B4-6461907B1082}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD3E8AAA-F8AB-4B06-83B4-6461907B1082}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD3E8AAA-F8AB-4B06-83B4-6461907B1082}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,17 @@
+﻿using System.Collections.Generic;
+using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Domodedovo.PhoneBook.Core.Extensions
+{
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection AddCoreServices(this IServiceCollection serviceCollection,
+            IList<Assembly> mediatRAssemblies)
+        {
+            mediatRAssemblies.Add(typeof(ServiceCollectionExtensions).Assembly);
+
+            return serviceCollection;
+        }
+    }
+}
