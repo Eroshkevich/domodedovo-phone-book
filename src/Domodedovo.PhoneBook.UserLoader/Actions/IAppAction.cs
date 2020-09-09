@@ -4,6 +4,6 @@ namespace Domodedovo.PhoneBook.UserLoader.Actions
 {
     public interface IAppAction
     {
-        Task Execute();
+        Task ExecuteAsync();
     }
 }

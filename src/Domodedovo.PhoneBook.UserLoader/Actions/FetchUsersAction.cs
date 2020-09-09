@@ -15,7 +15,7 @@ namespace Domodedovo.PhoneBook.UserLoader.Actions
             _mediator = mediator;
         }
 
-        public async Task Execute()
+        public async Task ExecuteAsync()
         {
             var getUsersQuery = new Integrations.RandomUser.CQRS.GetUsersQuery
             {

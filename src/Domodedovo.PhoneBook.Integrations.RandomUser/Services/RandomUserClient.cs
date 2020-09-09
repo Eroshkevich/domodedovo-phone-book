@@ -22,7 +22,7 @@ namespace Domodedovo.PhoneBook.Integrations.RandomUser.Services
             _jsonSerializerOptions = jsonSerializerOptionsProvider.GetOptions();
         }
 
-        public async Task<ResponseDTO> GetUsers(ushort? count = null)
+        public async Task<ResponseDTO> GetUsersAsync(ushort? count = null)
         {
             var usersCount = count ?? DefaultUsersCount;
 

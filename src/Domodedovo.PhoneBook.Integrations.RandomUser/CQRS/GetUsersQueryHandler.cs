@@ -31,7 +31,7 @@ namespace Domodedovo.PhoneBook.Integrations.RandomUser.CQRS
 
             _logger.LogInformation($"Getting {usersCount} Users...");
 
-            var responseDTO = await _randomUserClient.GetUsers(usersCount);
+            var responseDTO = await _randomUserClient.GetUsersAsync(usersCount);
 
             _logger.LogInformation($"{responseDTO.Results.Length} Users received.");
 

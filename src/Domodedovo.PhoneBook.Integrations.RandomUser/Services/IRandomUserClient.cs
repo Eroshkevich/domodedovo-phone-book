@@ -5,6 +5,6 @@ namespace Domodedovo.PhoneBook.Integrations.RandomUser.Services
 {
     public interface IRandomUserClient
     {
-        Task<ResponseDTO> GetUsers(ushort? count = null);
+        Task<ResponseDTO> GetUsersAsync(ushort? count = null);
     }
 }
