@@ -1,7 +1,10 @@
-﻿namespace Domodedovo.PhoneBook.UserLoader.Actions
+﻿using Domodedovo.PhoneBook.Core.Options;
+
+namespace Domodedovo.PhoneBook.UserLoader.Actions
 {
     public interface IAppActionFactory
     {
-        FetchUsersAction CreateFetchUsersAction(ushort? count = null);
+        FetchUsersAction CreateFetchUsersAction(ushort? count = null,
+            PictureLoadingOptions pictureLoadingOptions = null);
     }
 }

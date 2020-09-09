@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Domodedovo.PhoneBook.Core.CQRS;
+using Domodedovo.PhoneBook.Core.Options;
 using MediatR;
 
 namespace Domodedovo.PhoneBook.UserLoader.Actions
@@ -7,12 +8,14 @@ namespace Domodedovo.PhoneBook.UserLoader.Actions
     public class FetchUsersAction : IAppAction
     {
         private readonly IMediator _mediator;
+        private readonly PictureLoadingOptions _pictureLoadingOptions;
 
         public ushort? Count { get; set; }
 
-        public FetchUsersAction(IMediator mediator)
+        public FetchUsersAction(IMediator mediator, PictureLoadingOptions pictureLoadingOptions)
         {
             _mediator = mediator;
+            _pictureLoadingOptions = pictureLoadingOptions;
         }
 
         public async Task ExecuteAsync()
@@ -26,7 +29,8 @@ namespace Domodedovo.PhoneBook.UserLoader.Actions
 
             var createUsersCommand = new CreateUsersCommand
             {
-                Users = users
+                Users = users,
+                PictureLoadingOptions = _pictureLoadingOptions
             };
 
             await _mediator.Send(createUsersCommand);

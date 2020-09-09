@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Domodedovo.PhoneBook.Core.Options;
+using MediatR;
 
 namespace Domodedovo.PhoneBook.UserLoader.Actions
 {
@@ -11,9 +12,10 @@ namespace Domodedovo.PhoneBook.UserLoader.Actions
             _mediator = mediator;
         }
 
-        public FetchUsersAction CreateFetchUsersAction(ushort? count = null)
+        public FetchUsersAction CreateFetchUsersAction(ushort? count = null,
+            PictureLoadingOptions pictureLoadingOptions = null)
         {
-            var action = new FetchUsersAction(_mediator);
+            var action = new FetchUsersAction(_mediator, pictureLoadingOptions);
 
             if (count.HasValue)
                 action.Count = count.Value;

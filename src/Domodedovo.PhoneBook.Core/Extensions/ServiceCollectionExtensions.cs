@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using Domodedovo.PhoneBook.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Domodedovo.PhoneBook.Core.Extensions
@@ -10,6 +11,8 @@ namespace Domodedovo.PhoneBook.Core.Extensions
             IList<Assembly> mediatRAssemblies)
         {
             mediatRAssemblies.Add(typeof(ServiceCollectionExtensions).Assembly);
+
+            serviceCollection.AddHttpClient<IImageLoadService, ImageLoadService>();
 
             return serviceCollection;
         }

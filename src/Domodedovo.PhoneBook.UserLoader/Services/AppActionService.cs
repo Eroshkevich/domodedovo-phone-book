@@ -1,4 +1,5 @@
 ﻿using System;
+using Domodedovo.PhoneBook.Core.Options;
 using Domodedovo.PhoneBook.UserLoader.Actions;
 using Domodedovo.PhoneBook.UserLoader.Exceptions;
 using Domodedovo.PhoneBook.UserLoader.Options;
@@ -30,16 +31,30 @@ namespace Domodedovo.PhoneBook.UserLoader.Services
             if (!Enum.TryParse<AppCommand>(command, true, out var appCommand))
                 throw new AppCommandException($"Unknown command \"{command}\".");
 
-            return appCommand switch
+            switch (appCommand)
             {
-                AppCommand.Fetch => GetFetchUsersAction(),
-                _ => throw new ArgumentOutOfRangeException()
-            };
+                case AppCommand.Fetch:
+                {
+                    var pictureLoadingOptionsString = _consoleCommandOptions.PictureLoading;
+
+                    var pictureLoadingOptions = new PictureLoadingOptions();
+                    if (pictureLoadingOptionsString.Contains("_db"))
+                        pictureLoadingOptions.StoreInDatabaseEnabled = true;
+                    if (pictureLoadingOptionsString.Contains("_fs"))
+                        pictureLoadingOptions.StoreInFileSystemEnabled = true;
+                    if (pictureLoadingOptionsString.Contains("_silent"))
+                        pictureLoadingOptions.ThrowOnExceptions = false;
+
+                    return GetFetchUsersAction(pictureLoadingOptions);
+                }
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
-        private IAppAction GetFetchUsersAction()
+        private IAppAction GetFetchUsersAction(PictureLoadingOptions pictureLoadingOptions)
         {
-            return _appActionFactory.CreateFetchUsersAction(_consoleCommandOptions.UsersCount);
+            return _appActionFactory.CreateFetchUsersAction(_consoleCommandOptions.UsersCount, pictureLoadingOptions);
         }
     }
 }
