@@ -25,7 +25,7 @@ namespace Domodedovo.PhoneBook.Core.CQRS
 
         public async Task<Unit> Handle(CreateUsersCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Adding {request.Users.Count} Users");
+            _logger.LogInformation($"Adding {request.Users.Count} Users...");
 
             var users = _mapper.Map<ICollection<User>>(request.Users);
 

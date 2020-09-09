@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Domodedovo.PhoneBook.Data.Migrations
 {
@@ -29,7 +30,8 @@ namespace Domodedovo.PhoneBook.Data.Migrations
                     Name_Title = table.Column<string>(nullable: true),
                     Name_First = table.Column<string>(nullable: true),
                     Name_Last = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(maxLength: 15, nullable: false)
+                    PhoneNumber = table.Column<string>(maxLength: 15, nullable: true),
+                    Birthday = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {

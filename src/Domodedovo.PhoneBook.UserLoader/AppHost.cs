@@ -27,6 +27,8 @@ namespace Domodedovo.PhoneBook.UserLoader
                 var appCommand = _appActionService.GetAppCommand();
 
                 await appCommand.Execute();
+                
+                _logger.LogInformation("Success");
 
                 return ExitCode.Success;
             }

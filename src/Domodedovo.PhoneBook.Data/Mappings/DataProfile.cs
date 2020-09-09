@@ -15,18 +15,19 @@ namespace Domodedovo.PhoneBook.Data.Mappings
         public DataProfile()
         {
             CreateMap<string, PictureType>().ConvertUsing<StringToEnumConverter<PictureType>>();
-
             CreateMap<string, Uri>().ConvertUsing<StringToUriConverter>();
 
-            CreateMap<NameDTO, Name>();
+            CreateMap<NameDTO, Name>().ReverseMap();
 
-            CreateMap<PictureDTO, Picture>();
+            CreateMap<PictureDTO, Picture>().ReverseMap();
 
-            var userPictureValueResolver = new UserPictureValueResolver();
-            CreateMap<UserDTO, User>().ForMember(d => d.Pictures, e => e.MapFrom(userPictureValueResolver));
+            CreateMap<UserDTO, User>()
+                .ForMember(d => d.Pictures, e => e.MapFrom<UserPicturesPicturesValueResolver>())
+                .ReverseMap()
+                .ForMember(d => d.Pictures, e => e.MapFrom<PicturesUserPicturesValueResolver>());
         }
 
-        private class UserPictureValueResolver : IValueResolver<UserDTO, User, ICollection<UserPicture>>
+        private class UserPicturesPicturesValueResolver : IValueResolver<UserDTO, User, ICollection<UserPicture>>
         {
             public ICollection<UserPicture> Resolve(UserDTO source, User destination,
                 ICollection<UserPicture> destMember, ResolutionContext context)
@@ -39,6 +40,13 @@ namespace Domodedovo.PhoneBook.Data.Mappings
                     Picture = e
                 }).ToList();
             }
+        }
+
+        private class PicturesUserPicturesValueResolver : IValueResolver<User, UserDTO, ICollection<PictureDTO>>
+        {
+            public ICollection<PictureDTO> Resolve(User source, UserDTO destination, ICollection<PictureDTO> destMember,
+                ResolutionContext context) =>
+                context.Mapper.Map<ICollection<PictureDTO>>(source.Pictures.Select(e => e.Picture));
         }
     }
 }

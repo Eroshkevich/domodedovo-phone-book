@@ -15,8 +15,9 @@ namespace Domodedovo.PhoneBook.Integrations.RandomUser.Mappings
             var picturesValueConverter = new PicturesValueConverter();
             CreateMap<UserDTO, Data.DTO.UserDTO>()
                 .ForMember(d => d.PhoneNumber, e => e.AddTransform(number => _notANumberRegex.Replace(number, "")))
+                .ForMember(d => d.Birthday, e => e.MapFrom(s => s.DateOfBirth.Date))
                 .ForMember(d => d.Pictures, e => e.ConvertUsing(picturesValueConverter, s => s.Picture));
-            
+
             CreateMap<NameDTO, Data.DTO.NameDTO>();
         }
 

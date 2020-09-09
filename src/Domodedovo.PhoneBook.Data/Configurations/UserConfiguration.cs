@@ -8,7 +8,7 @@ namespace Domodedovo.PhoneBook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.Property(e => e.PhoneNumber).HasMaxLength(15).IsRequired();
+            builder.Property(e => e.PhoneNumber).HasMaxLength(15);
 
             builder.OwnsOne(e => e.Name, navBuilder =>
             {

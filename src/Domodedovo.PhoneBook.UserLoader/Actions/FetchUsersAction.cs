@@ -1,17 +1,14 @@
 ﻿using System.Threading.Tasks;
 using Domodedovo.PhoneBook.Core.CQRS;
-using Domodedovo.PhoneBook.Integrations.RandomUser.CQRS;
 using MediatR;
 
 namespace Domodedovo.PhoneBook.UserLoader.Actions
 {
     public class FetchUsersAction : IAppAction
     {
-        private const ushort DefaultUsersCount = 1000;
-
         private readonly IMediator _mediator;
 
-        public ushort Count { get; set; } = DefaultUsersCount;
+        public ushort? Count { get; set; }
 
         public FetchUsersAction(IMediator mediator)
         {
@@ -20,7 +17,7 @@ namespace Domodedovo.PhoneBook.UserLoader.Actions
 
         public async Task Execute()
         {
-            var getUsersQuery = new GetUsersQuery
+            var getUsersQuery = new Integrations.RandomUser.CQRS.GetUsersQuery
             {
                 Count = Count
             };

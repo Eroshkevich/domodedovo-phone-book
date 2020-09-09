@@ -11,6 +11,8 @@ namespace Domodedovo.PhoneBook.Integrations.RandomUser.CQRS
 {
     public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, ICollection<UserDTO>>
     {
+        private const ushort DefaultUsersCount = 1000;
+
         private readonly IMapper _mapper;
         private readonly IRandomUserClient _randomUserClient;
         private readonly ILogger<GetUsersQueryHandler> _logger;
@@ -25,9 +27,11 @@ namespace Domodedovo.PhoneBook.Integrations.RandomUser.CQRS
 
         public async Task<ICollection<UserDTO>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Getting {request.Count} Users...");
+            var usersCount = request.Count ?? DefaultUsersCount;
 
-            var responseDTO = await _randomUserClient.GetUsers(request.Count);
+            _logger.LogInformation($"Getting {usersCount} Users...");
+
+            var responseDTO = await _randomUserClient.GetUsers(usersCount);
 
             _logger.LogInformation($"{responseDTO.Results.Length} Users received.");
 
