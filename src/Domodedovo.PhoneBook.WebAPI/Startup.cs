@@ -7,8 +7,10 @@ using Domodedovo.PhoneBook.Core.CQRS;
 using Domodedovo.PhoneBook.Core.Extensions;
 using Domodedovo.PhoneBook.Data;
 using Domodedovo.PhoneBook.Data.Extensions;
+using Domodedovo.PhoneBook.WebAPI.Auth.GitHub;
 using Domodedovo.PhoneBook.WebAPI.ModelBinders;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,7 @@ namespace Domodedovo.PhoneBook.WebAPI
 {
     public class Startup
     {
+        private const string GitHubAuthenticationSchemeName = "GitHub";
         private IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
@@ -33,9 +36,17 @@ namespace Domodedovo.PhoneBook.WebAPI
             services.AddControllers(options =>
                 options.ModelBinderProviders.Insert(0, new SortingParameterCollectionBinderProvider()));
 
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = GitHubAuthenticationSchemeName;
+                })
+                .AddCookie()
+                .AddGitHubOAuth(GitHubAuthenticationSchemeName, Configuration.GetSection("GitHub"));
+
             var xmlCommentsFilePath =
                 Path.Combine(AppContext.BaseDirectory, $"{typeof(Startup).Assembly.GetName().Name}.xml");
-
             services.AddSwaggerGen(c =>
             {
                 c.IncludeXmlComments(xmlCommentsFilePath);
@@ -64,7 +75,6 @@ namespace Domodedovo.PhoneBook.WebAPI
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseSwagger();
-
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
 
             if (env.IsDevelopment())
@@ -72,8 +82,10 @@ namespace Domodedovo.PhoneBook.WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
+            app.UseStaticFiles();
 
+            app.UseRouting();
+            app.UseAuthentication();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
