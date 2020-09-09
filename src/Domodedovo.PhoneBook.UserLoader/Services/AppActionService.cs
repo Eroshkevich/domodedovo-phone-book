@@ -42,7 +42,7 @@ namespace Domodedovo.PhoneBook.UserLoader.Services
                         pictureLoadingOptions.StoreInDatabaseEnabled = true;
                     if (pictureLoadingOptionsString.Contains("_fs"))
                         pictureLoadingOptions.StoreInFileSystemEnabled = true;
-                    if (pictureLoadingOptionsString.Contains("_silent"))
+                    if (pictureLoadingOptionsString.Contains("_hard"))
                         pictureLoadingOptions.ThrowOnExceptions = false;
 
                     return GetFetchUsersAction(pictureLoadingOptions);

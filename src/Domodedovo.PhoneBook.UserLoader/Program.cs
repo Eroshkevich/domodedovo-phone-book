@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using Domodedovo.PhoneBook.Core.Extensions;
+using Domodedovo.PhoneBook.Core.Options;
 using Domodedovo.PhoneBook.Data.Extensions;
 using Domodedovo.PhoneBook.Integrations.RandomUser.Extensions;
 using Domodedovo.PhoneBook.UserLoader.Actions;
@@ -51,6 +52,8 @@ namespace Domodedovo.PhoneBook.UserLoader
             var randomUserApiUrl = new Uri(configuration["Integrations:RandomUser:ApiUrl"]);
 
             serviceCollection.Configure<ConsoleCommandOptions>(configuration);
+            serviceCollection.Configure<FileStorageOptions>(options =>
+                options.Path = Path.Combine(AppContext.BaseDirectory, configuration["FileStorage:Path"]));
 
             serviceCollection.AddLogging(builder =>
                 builder.AddConsole().AddConfiguration(configuration.GetSection("Logging")));

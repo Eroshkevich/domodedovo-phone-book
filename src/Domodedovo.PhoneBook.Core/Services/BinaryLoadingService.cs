@@ -6,12 +6,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Domodedovo.PhoneBook.Core.Services
 {
-    public class ImageLoadService : IImageLoadService
+    public class BinaryLoadingService : IBinaryLoadingService
     {
         private readonly HttpClient _httpClient;
-        private readonly ILogger<ImageLoadService> _logger;
+        private readonly ILogger<BinaryLoadingService> _logger;
 
-        public ImageLoadService(HttpClient httpClient, ILogger<ImageLoadService> logger)
+        public BinaryLoadingService(HttpClient httpClient, ILogger<BinaryLoadingService> logger)
         {
             _httpClient = httpClient;
             _logger = logger;

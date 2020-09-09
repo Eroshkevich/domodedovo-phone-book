@@ -4,6 +4,8 @@
     {
         Success,
         UnknownCommand,
-        RandomUserApiError
+        RandomUserApiError,
+        ImageLoadError,
+        FileStorageError
     }
 }

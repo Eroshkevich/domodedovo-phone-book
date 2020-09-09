@@ -12,9 +12,9 @@ namespace Domodedovo.PhoneBook.Core.Extensions
         {
             mediatRAssemblies.Add(typeof(ServiceCollectionExtensions).Assembly);
 
-            serviceCollection.AddHttpClient<IImageLoadService, ImageLoadService>();
+            serviceCollection.AddHttpClient<IBinaryLoadingService, BinaryLoadingService>();
 
-            return serviceCollection;
+            return serviceCollection.AddTransient<IFileStorageService, FileStorageService>();
         }
     }
 }

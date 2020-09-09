@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Domodedovo.PhoneBook.Core.Services;
 using Domodedovo.PhoneBook.Data;
 using Domodedovo.PhoneBook.Data.Models.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Domodedovo.PhoneBook.Core.CQRS
@@ -16,15 +18,18 @@ namespace Domodedovo.PhoneBook.Core.CQRS
         private readonly IMapper _mapper;
         private readonly UsersDbContext _usersDbContext;
         private readonly ILogger<CreateUsersCommandHandler> _logger;
-        private readonly IImageLoadService _imageLoadService;
+        private readonly IBinaryLoadingService _binaryLoadingService;
+        private readonly IFileStorageService _fileStorageService;
 
         public CreateUsersCommandHandler(UsersDbContext usersDbContext, IMapper mapper,
-            ILogger<CreateUsersCommandHandler> logger, IImageLoadService imageLoadService)
+            ILogger<CreateUsersCommandHandler> logger, IBinaryLoadingService binaryLoadingService,
+            IFileStorageService fileStorageService)
         {
             _usersDbContext = usersDbContext;
             _mapper = mapper;
             _logger = logger;
-            _imageLoadService = imageLoadService;
+            _binaryLoadingService = binaryLoadingService;
+            _fileStorageService = fileStorageService;
         }
 
         public async Task<Unit> Handle(CreateUsersCommand request, CancellationToken cancellationToken)
@@ -33,28 +38,53 @@ namespace Domodedovo.PhoneBook.Core.CQRS
 
             var users = _mapper.Map<ICollection<User>>(request.Users);
 
-            foreach (var user in users)
+            using (var transaction = await _usersDbContext.Database.BeginTransactionAsync(cancellationToken))
             {
-                if (request.PictureLoadingOptions != null &&
-                    user.Pictures.Any()
+                _usersDbContext.AddRange(users);
+
+                await _usersDbContext.SaveChangesAsync(cancellationToken);
+
+                if (request.PictureLoadingOptions != null
                     && (request.PictureLoadingOptions.StoreInDatabaseEnabled
                         || request.PictureLoadingOptions.StoreInFileSystemEnabled))
                 {
-                    foreach (var userPicture in user.Pictures)
+                    foreach (var user in users)
                     {
-                        if (userPicture.Picture.Url == null)
+                        if (!user.Pictures.Any())
+                            continue;
+
+                        foreach (var picture in user.Pictures.Select(e => e.Picture))
                         {
-                            _logger.LogWarning($"Picture {userPicture.Picture.Id} loading skipped. Url not defined.");
+                            if (picture.Url == null)
+                            {
+                                _logger.LogWarning($"Picture {picture.Id} loading skipped. Url not defined.");
+                                continue;
+                            }
+
+                            var image = await _binaryLoadingService.LoadAsync(picture.Url,
+                                request.PictureLoadingOptions.ThrowOnExceptions);
+
+                            if (image == null)
+                                continue;
+
+                            if (request.PictureLoadingOptions.StoreInDatabaseEnabled)
+                                picture.Image = image;
+
+                            if (!request.PictureLoadingOptions.StoreInFileSystemEnabled)
+                                continue;
+
+                            var imagePath = await _fileStorageService.SaveAsync(
+                                $"users\\{user.Id}\\pictures\\{picture.Id}.jpg", image,
+                                request.PictureLoadingOptions.ThrowOnExceptions);
+
+                            picture.Path = imagePath;
                         }
-
-                        var image = await _imageLoadService.LoadAsync(userPicture.Picture.Url);
-
-                        if (image != null && request.PictureLoadingOptions.StoreInDatabaseEnabled)
-                            userPicture.Picture.Image = image;
                     }
+
+                    _usersDbContext.UpdateRange(users);
                 }
 
-                _usersDbContext.Add(user);
+                await transaction.CommitAsync(cancellationToken);
             }
 
             await _usersDbContext.SaveChangesAsync(cancellationToken);

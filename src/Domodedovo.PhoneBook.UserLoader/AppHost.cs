@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Domodedovo.PhoneBook.Core.Exceptions;
 using Domodedovo.PhoneBook.Integrations.RandomUser.Exceptions;
 using Domodedovo.PhoneBook.UserLoader.Exceptions;
 using Domodedovo.PhoneBook.UserLoader.Services;
@@ -38,6 +39,10 @@ namespace Domodedovo.PhoneBook.UserLoader
 
                 switch (e)
                 {
+                    case FileStorageException fileStorageException:
+                        return ExitCode.FileStorageError;
+                    case ImageLoadException imageLoadException:
+                        return ExitCode.ImageLoadError;
                     case AppCommandException _:
                         return ExitCode.UnknownCommand;
                     case RandomUserApiException _:
