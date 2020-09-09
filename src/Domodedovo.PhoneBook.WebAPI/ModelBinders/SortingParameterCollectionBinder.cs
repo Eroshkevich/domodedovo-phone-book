@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Domodedovo.PhoneBook.WebAPI.ModelBinders
 {
-    public class SortingParameterCollectionBinder : IModelBinder
+    public class SortingParameterCollectionBinder<T> : IModelBinder where T : struct, Enum
     {
         private const string DescendingFlag = "desc";
 
-        private static Task SuccessResult(ModelBindingContext bindingContext,
-            ICollection<SortingParameter<GetUsersQuerySortingKey>> sortingParameters = null)
+        private static Task Result(ModelBindingContext bindingContext,
+            ICollection<SortingParameter<T>> sortingParameters = null)
         {
             bindingContext.Result = ModelBindingResult.Success(sortingParameters);
             return Task.CompletedTask;
@@ -24,14 +24,14 @@ namespace Domodedovo.PhoneBook.WebAPI.ModelBinders
             if (bindingContext == null)
                 throw new ArgumentNullException(nameof(bindingContext));
 
-            var sortingProviderResult = bindingContext.ValueProvider.GetValue("sorting");
+            var sortingProviderResult = bindingContext.ValueProvider.GetValue(bindingContext.FieldName);
 
             if (sortingProviderResult == ValueProviderResult.None)
-                return SuccessResult(bindingContext);
+                return Result(bindingContext);
 
             var sortingValue = sortingProviderResult.FirstValue;
             if (string.IsNullOrWhiteSpace(sortingValue))
-                return SuccessResult(bindingContext);
+                return Result(bindingContext);
 
             var sortingParameters = sortingValue.Split(';').Select(s =>
                 {
@@ -46,20 +46,22 @@ namespace Domodedovo.PhoneBook.WebAPI.ModelBinders
 
                     var sortingKeyString = stringBuilder.ToString().Trim();
 
-                    if (Enum.TryParse<GetUsersQuerySortingKey>(sortingKeyString, true, out var sortingKey))
+                    if (Enum.TryParse<T>(sortingKeyString, true, out var sortingKey))
                     {
-                        return new SortingParameter<GetUsersQuerySortingKey>
+                        return new SortingParameter<T>
                         {
                             SortingKey = sortingKey,
                             IsDescending = isDescending
                         };
                     }
 
-                    throw new Exception();
+                    bindingContext.ModelState.AddModelError(bindingContext.FieldName,
+                        $"Invalid sorting key '{sortingKeyString}'");
+                    return null;
                 }
             );
 
-            return SuccessResult(bindingContext, sortingParameters.ToList());
+            return Result(bindingContext, sortingParameters.ToList());
         }
     }
 }
