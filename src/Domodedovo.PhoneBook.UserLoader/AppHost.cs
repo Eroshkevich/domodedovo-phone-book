@@ -27,7 +27,7 @@ namespace Domodedovo.PhoneBook.UserLoader
                 var appCommand = _appActionService.GetAppCommand();
 
                 await appCommand.Execute();
-                
+
                 _logger.LogInformation("Success");
 
                 return ExitCode.Success;
@@ -36,7 +36,6 @@ namespace Domodedovo.PhoneBook.UserLoader
             {
                 _logger.LogError(e, e.Message);
 
-                //TODO: Do it in Exception Handler
                 switch (e)
                 {
                     case AppCommandException _:
